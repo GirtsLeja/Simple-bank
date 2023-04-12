@@ -1,0 +1,101 @@
+using System;
+using System.Collections.Generic;
+
+public class Customer
+{
+    public string Name { get; set; }
+    public string Surname { get; set; }
+    public string Id { get; set; }
+    public string Email { get; set; }
+    public DateTime DateTimeCreated { get; set; }
+    public List<Account> Accounts { get; set; }
+
+    public Customer(string name, string surname, string id, string email)
+    {
+        Name = name;
+        Surname = surname;
+        Id = id;
+        Email = email;
+        DateTimeCreated = DateTime.Now;
+        Accounts = new List<Account>();
+    }
+
+    public void Status()
+    {
+        Console.WriteLine($"Client: {Name} {Surname} ({Id}) {DateTimeCreated}");
+    }
+
+    public void AddAccount(string number, string currency, decimal balance)
+    {
+        Accounts.Add(new Account(number, currency, balance));
+    }
+
+    public void PrintAccounts()
+    {
+        foreach (var account in Accounts)
+        {
+            account.Status();
+        }
+    }
+
+    public void DeleteAccount(string number)
+    {
+        Account accountToRemove = null;
+        foreach (var account in Accounts)
+        {
+            if (account.Number == number)
+            {
+                accountToRemove = account;
+                Console.WriteLine($"Konts ar numuru {number} ir dzēsts.");
+                break;
+            }
+        }
+
+        if (accountToRemove != null)
+        {
+            Accounts.Remove(accountToRemove);
+        }
+        else
+        {
+            Console.WriteLine($"Konts ar numuru {number} nav atrasts.");
+        }
+    }
+}
+
+public class Account
+{
+    public string Number { get; set; }
+    public string Currency { get; set; }
+    public decimal Balance { get; set; }
+    public string AccountStatus { get; set; }
+    public DateTime DateTimeCreated { get; set; }
+
+    public Account(string number, string currency, decimal balance, string status = "Active")
+    {
+        Number = number;
+        Currency = currency;
+        Balance = balance;
+        AccountStatus = status;
+        DateTimeCreated = DateTime.Now;
+    }
+
+    public void Status()
+    {
+        Console.WriteLine($"Account: {Number} ({Currency}) {Balance} {AccountStatus}");
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        var customer1 = new Customer("Anna", "Bērziņa", "78987-65448", "annab@someemail.co");
+        customer1.AddAccount("123456789", "EUR", 200);
+        customer1.AddAccount("987654321", "USD", 100);
+
+        customer1.Status();
+        customer1.PrintAccounts();
+        customer1.DeleteAccount("852147963");
+        customer1.PrintAccounts();
+    }
+}
